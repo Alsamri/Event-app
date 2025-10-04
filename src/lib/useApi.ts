@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { useAuth } from "@clerk/clerk-react";
 import { createClient } from "./api";
-import { redirect } from "react-router";
 
 export function useApi() {
   const { getToken } = useAuth();
@@ -15,7 +14,7 @@ export function useApi() {
           config.headers.Authorization = `Bearer ${token}`;
         }
       } catch (e) {
-        redirect("/");
+        window.location.href = "/";
       }
       return config;
     });

@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NavBar from "./components/Navbar";
 import Landing from "./pages/Landing";
+import EventsPage from "./pages/EventsPage";
 function App() {
   return (
     <Router>
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="events" element={<EventsPage />} />
       </Routes>
     </Router>
   );
