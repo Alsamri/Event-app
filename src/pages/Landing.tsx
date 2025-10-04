@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
-
 import WhyUseSection from "@/components/WhyUse";
 
 export default function Landing() {
