@@ -8,6 +8,7 @@ import Landing from "./pages/Landing";
 import EventsPage from "./pages/EventsPage";
 import { Toaster } from "sonner";
 import EventDetailsPage from "./pages/EventDetailsPage";
+import CreateEventPage from "./pages/CreateEventPage";
 function App() {
   return (
     <Router>
@@ -18,6 +19,8 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="events" element={<EventsPage />} />
         <Route path="/events/:id" element={<EventDetailsPage />} />
+        <Route path="/events/create" element={<CreateEventPage />} />
+
       </Routes>
       <Toaster />
     </Router>
