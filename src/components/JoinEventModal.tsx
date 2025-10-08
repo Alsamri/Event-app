@@ -11,7 +11,8 @@ import { createPaymentIntent } from "@/services/paymentService";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useApi } from "@/lib/useApi";
-
+import { useAuth } from "@clerk/clerk-react";
+import { signupEvent } from "@/services/signupService";
 type JoinEventModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -34,9 +35,16 @@ export function JoinEventModal({
 
   const [loading, setLoading] = useState(false);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
-
+  const { isSignedIn } = useAuth();
+ 
   const handleCheckout = async () => {
     try {
+       if (!isSignedIn) {
+      toast.error("Please sign in to join events");
+      return;
+    }
+
+  
       setLoading(true);
       if (!event.price || event.price <= 0) {
         toast.error("Invalid event price");
@@ -46,7 +54,7 @@ export function JoinEventModal({
       const res = await createPaymentIntent(api, event.id, event.price * 100);
       setClientSecret(res.clientSecret);
     } catch (err) {
-      console.error("Payment intent error:", err);
+    
       toast.error("Could not start payment");
       setLoading(false);
     }
@@ -65,7 +73,8 @@ export function JoinEventModal({
     if (result.error) {
       toast.error(result.error.message || "Payment failed");
     } else if (result.paymentIntent?.status === "succeeded") {
-      toast.success("🎉 Payment successful! You’ve joined the event.");
+      toast.success(" Payment successful! You’ve joined the event.");
+       await signupEvent(api, event.id);
       onOpenChange(false);
     }
 
