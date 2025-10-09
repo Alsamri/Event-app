@@ -8,6 +8,7 @@ import {
 } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
 import SearchBar from "./SearchBar";
+import {  CreateEventNavButton } from "./CreateEventButton";
 
 export default function NavBar() {
   return (
@@ -30,6 +31,9 @@ export default function NavBar() {
           <Link to="/events" className="text-sm text-muted-foreground">
             Events
           </Link>
+           <div className="flex items-center gap-4">
+          <CreateEventNavButton />
+        </div>
           <SignedOut>
             <SignInButton>
               <Button variant="ghost" size="sm">

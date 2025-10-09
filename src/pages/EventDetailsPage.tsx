@@ -1,18 +1,37 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "@/lib/useApi";
-import { getEvent } from "@/services/eventService";
+import { getEvent, deleteEvent } from "@/services/eventService";
 import { signupEvent } from "@/services/signupService";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { CalendarDays, MapPin, ArrowLeft } from "lucide-react";
+import { CalendarDays, MapPin, ArrowLeft, Edit, Trash2, MoreVertical } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@clerk/clerk-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { JoinEventModal } from "@/components/JoinEventModal";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { getMe } from "@/services/userService";
 
 type Event = {
   id: number;
@@ -30,13 +49,16 @@ export default function EventDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const api = useApi();
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, userId } = useAuth();
 
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [joining, setJoining] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadEvent() {
@@ -52,7 +74,26 @@ export default function EventDetailsPage() {
       }
     }
     if (id) loadEvent();
-  }, [id]);
+  }, [id, api]);
+
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      if (!isSignedIn || !userId) return;
+      
+      try {
+    
+        const response = await getMe(api)
+      
+        
+        setUserRole(response.role);
+      } catch (error) {
+        console.error("Failed to fetch user role:", error);
+      }
+    };
+
+    fetchUserRole();
+  }, [isSignedIn, userId, api]);
 
   const handleJoin = async () => {
     if (!isSignedIn) {
@@ -72,6 +113,30 @@ export default function EventDetailsPage() {
       setJoining(false);
     }
   };
+
+  const handleEdit = () => {
+    if (!event) return;
+    navigate(`/events/${event.id}/edit`);
+  };
+
+  const handleDelete = async () => {
+    if (!event) return;
+    
+    try {
+      setDeleting(true);
+      await deleteEvent(api, event.id);
+      toast.success("Event deleted successfully!");
+      navigate("/events");
+    } catch (err) {
+      console.error("Error deleting event:", err);
+      toast.error("Failed to delete event. Please try again.");
+    } finally {
+      setDeleting(false);
+      setShowDeleteDialog(false);
+    }
+  };
+
+  const isStaff = userRole === "staff";
 
   if (loading)
     return (
@@ -98,6 +163,7 @@ export default function EventDetailsPage() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
     >
+     
       <motion.div
         className="relative rounded-3xl overflow-hidden shadow-xl bg-gradient-to-br from-indigo-100 via-purple-100 to-blue-100 dark:from-gray-800 dark:via-gray-900 dark:to-gray-950"
         initial={{ y: 20, opacity: 0 }}
@@ -107,12 +173,22 @@ export default function EventDetailsPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent" />
         <div className="relative p-10 sm:p-16 text-white flex flex-col justify-end min-h-[320px]">
           <div className="space-y-3">
-            <Badge
-              variant="secondary"
-              className="text-sm bg-white/30 text-white backdrop-blur-md"
-            >
-              {event.isPaid ? "Premium Event" : "Free Event"}
-            </Badge>
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge
+                variant="secondary"
+                className="text-sm bg-white/30 text-white backdrop-blur-md"
+              >
+                {event.isPaid ? "Premium Event" : "Free Event"}
+              </Badge>
+              {isStaff && (
+                <Badge
+                  variant="secondary"
+                  className="text-sm bg-green-500/30 text-white backdrop-blur-md"
+                >
+                  Staff
+                </Badge>
+              )}
+            </div>
             <h1 className="text-4xl sm:text-5xl font-extrabold drop-shadow-lg">
               {event.title}
             </h1>
@@ -123,6 +199,7 @@ export default function EventDetailsPage() {
         </div>
       </motion.div>
 
+      
       <motion.div
         className="rounded-2xl shadow-lg backdrop-blur-md bg-white/70 dark:bg-black/40 border border-border/40"
         initial={{ y: 30, opacity: 0 }}
@@ -150,13 +227,41 @@ export default function EventDetailsPage() {
                 </div>
               </div>
             </div>
-            <Button
-              variant="ghost"
-              className="rounded-full"
-              onClick={() => navigate(-1)}
-            >
-              <ArrowLeft className="w-4 h-4 mr-1" /> Back
-            </Button>
+            
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                className="rounded-full"
+                onClick={() => navigate(-1)}
+              >
+                <ArrowLeft className="w-4 h-4 mr-1" /> Back
+              </Button>
+              
+            
+              {isStaff && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="rounded-full">
+                      <MoreVertical className="w-4 h-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <DropdownMenuItem onClick={handleEdit}>
+                      <Edit className="w-4 h-4 mr-2" />
+                      Edit Event
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      onClick={() => setShowDeleteDialog(true)}
+                      className="text-red-600 focus:text-red-600"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" />
+                      Delete Event
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
           </CardHeader>
 
           <Separator className="my-4" />
@@ -170,21 +275,47 @@ export default function EventDetailsPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-              {event.isPaid ? (
-                <Badge variant="secondary" className="text-base py-2 px-4">
-                  💳 {event.price} {event.currency?.toUpperCase()}
-                </Badge>
-              ) : (
-                <Badge variant="outline" className="text-base py-2 px-4">
-                  Free Event
-                </Badge>
-              )}
+              <div className="flex items-center gap-4">
+                {event.isPaid ? (
+                  <Badge variant="secondary" className="text-base py-2 px-4">
+                    💳 {event.price} {event.currency?.toUpperCase()}
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="text-base py-2 px-4">
+                    Free Event
+                  </Badge>
+                )}
+                
+                
+                {isStaff && (
+                  <div className="hidden sm:flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleEdit}
+                      className="rounded-full"
+                    >
+                      <Edit className="w-4 h-4 mr-1" />
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowDeleteDialog(true)}
+                      className="rounded-full text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700"
+                    >
+                      <Trash2 className="w-4 h-4 mr-1" />
+                      Delete
+                    </Button>
+                  </div>
+                )}
+              </div>
 
               <Button
                 size="lg"
                 onClick={() => setShowModal(true)}
                 disabled={joining}
-                className="rounded-full shadow-md w-full sm:w-auto"
+                className="rounded-full shadow-md w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
               >
                 Join Event
               </Button>
@@ -198,6 +329,29 @@ export default function EventDetailsPage() {
           </CardContent>
         </Card>
       </motion.div>
+
+     
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the event
+              "{event.title}" and remove all associated data from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              disabled={deleting}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+            >
+              {deleting ? "Deleting..." : "Delete Event"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </motion.main>
   );
 }
