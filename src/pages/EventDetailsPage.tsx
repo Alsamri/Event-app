@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "@/lib/useApi";
 import { getEvent, deleteEvent } from "@/services/eventService";
-import { signupEvent } from "@/services/signupService";
+import { listMyEvents} from "@/services/signupService";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { CalendarDays, MapPin, ArrowLeft, Edit, Trash2, MoreVertical } from "lucide-react";
+import { CalendarDays, MapPin, ArrowLeft, Edit, Trash2, MoreVertical, CheckCircle2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@clerk/clerk-react";
 import { toast } from "sonner";
@@ -43,6 +43,7 @@ type Event = {
   isPaid?: boolean;
   price?: number;
   currency?: string;
+  eventId?:number
 };
 
 export default function EventDetailsPage() {
@@ -50,21 +51,22 @@ export default function EventDetailsPage() {
   const navigate = useNavigate();
   const api = useApi();
   const { isSignedIn, userId } = useAuth();
-
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
-  const [joining, setJoining] = useState(false);
+ 
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
-
+const [isSignedUp, setIsSignedUp] = useState(false);
+const [checkingSignup, setCheckingSignup] = useState(true);
   useEffect(() => {
     async function loadEvent() {
       try {
         setLoading(true);
         const data = await getEvent(api, Number(id));
+        
         setEvent(data);
       } catch (err) {
         console.error("Error fetching event:", err);
@@ -95,28 +97,34 @@ export default function EventDetailsPage() {
     fetchUserRole();
   }, [isSignedIn, userId, api]);
 
-  const handleJoin = async () => {
-    if (!isSignedIn) {
-      navigate("/signup");
-      return;
-    }
 
-    if (!event) return;
+useEffect(() => {
+  async function checkUserSignup() {
+    if (!isSignedIn || !event) return;
+    
     try {
-      setJoining(true);
-      await signupEvent(api, event.id);
-      toast.success("Successfully joined the event!");
+      const myEvents = await listMyEvents(api);
+    
+      const isUserSignedUp = myEvents.some((e: Event) => e.eventId === event.id);
+      setIsSignedUp(isUserSignedUp);
     } catch (err) {
-      console.error("Error joining event:", err);
-      toast.error("Failed to sign up for this event. Please try again.");
+      console.error("Error checking user signup:", err);
     } finally {
-      setJoining(false);
+      setCheckingSignup(false);
     }
-  };
+  }
+
+  if (event) {
+    checkUserSignup();
+  }
+}, [event, isSignedIn, api]);
+
 
   const handleEdit = () => {
     if (!event) return;
     navigate(`/events/${event.id}/edit`);
+    console.log(event);
+    
   };
 
   const handleDelete = async () => {
@@ -311,21 +319,34 @@ export default function EventDetailsPage() {
                 )}
               </div>
 
-              <Button
-                size="lg"
-                onClick={() => setShowModal(true)}
-                disabled={joining}
-                className="rounded-full shadow-md w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-              >
-                Join Event
-              </Button>
+              
+  {checkingSignup ? (
+    <Skeleton className="h-10 w-32 rounded-full" />
+  ) : isSignedUp ? (
+    <div className="flex items-center gap-2 text-green-600 bg-green-50 dark:bg-green-900/20 px-4 py-2 rounded-full">
+      <CheckCircle2 className="w-4 h-4" />
+      <span className="font-medium">You're Going!</span>
+    </div>
+  ) : (
+    <>
+      <Button
+        size="lg"
+        onClick={() => setShowModal(true)}
+        className="rounded-full shadow-md w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+      >
+        Join Event
+      </Button>
 
-              <JoinEventModal
-                open={showModal}
-                onOpenChange={setShowModal}
-                event={event}
-              />
-            </div>
+      <JoinEventModal
+        open={showModal}
+        onOpenChange={setShowModal}
+        event={event}
+        onSuccess={() => setIsSignedUp(true)} 
+      />
+    </>
+  )}
+</div>
+
           </CardContent>
         </Card>
       </motion.div>
