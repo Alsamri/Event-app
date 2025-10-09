@@ -30,6 +30,7 @@ type JoinEventModalProps = {
     location: string;
     description?: string;
   };
+  onSuccess?:()=> void
 };
 
 type ModalStep = "initial" | "payment" | "success" | "calendar" | "connect";
@@ -38,6 +39,7 @@ export function JoinEventModal({
   open,
   onOpenChange,
   event,
+  onSuccess
 }: JoinEventModalProps) {
   const api = useApi();
   const stripe = useStripe();
@@ -84,6 +86,7 @@ export function JoinEventModal({
         await signupEvent(api, event.id);
         setCurrentStep("success");
         toast.success("Successfully joined the event!");
+      
       }
     } catch (err) {
       console.error("Checkout error:", err);
@@ -109,6 +112,7 @@ export function JoinEventModal({
       } else if (result.paymentIntent?.status === "succeeded") {
         await signupEvent(api, event.id);
         setCurrentStep("success");
+        
         toast.success("Payment successful! You've joined the event.");
       }
     } catch (err) {
@@ -149,8 +153,6 @@ export function JoinEventModal({
    
     sessionStorage.setItem('pendingCalendarEvent', event.id.toString());
     
-    
-
     window.location.href = url;
   } catch (err) {
     console.error("Google auth error:", err);
