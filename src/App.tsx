@@ -9,6 +9,12 @@ import EventsPage from "./pages/EventsPage";
 import { Toaster } from "sonner";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import CreateEventPage from "./pages/CreateEventPage";
+import { SignedIn, SignedOut, RedirectToSignIn } from "@clerk/clerk-react";
+import EditEventPage from "./pages/EditEventPage";
+import GoogleSuccessPage from "./pages/GoogleSuccessPage";
+
+
+
 function App() {
   return (
     <Router>
@@ -17,10 +23,29 @@ function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="events" element={<EventsPage />} />
+        <Route path="/events" element={<EventsPage />} />
         <Route path="/events/:id" element={<EventDetailsPage />} />
-        <Route path="/events/create" element={<CreateEventPage />} />
+        <Route path= "/events/:id/edit" element={<EditEventPage />}/>
+         <Route path= "/google-success" element={<GoogleSuccessPage />}/>
+      
+        <Route 
+          path="/events/create" 
+          element={
+            <SignedIn>
+              <CreateEventPage />
+            </SignedIn>
+          } 
+        />
+        
 
+        <Route 
+          path="*" 
+          element={
+            <SignedOut>
+              <RedirectToSignIn />
+            </SignedOut>
+          } 
+        />
       </Routes>
       <Toaster />
     </Router>

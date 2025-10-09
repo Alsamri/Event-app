@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { CreateEventSidebarButton } from "@/components/CreateEventButton";
 
 type Event = {
   id: number;
@@ -50,7 +51,7 @@ export default function EventsPage() {
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-16 space-y-10">
-      {/* Header */}
+     
       <div className="text-center space-y-3">
         <h1 className="text-4xl font-extrabold tracking-tight text-foreground">
           {query ? `Search results for “${query}”` : "Discover Upcoming Events"}
@@ -58,6 +59,8 @@ export default function EventsPage() {
         <p className="text-muted-foreground text-lg">
           Explore community-driven events, workshops, and meetups near you.
         </p>
+         <div className="flex items-center gap-4"></div>
+       <CreateEventSidebarButton />
       </div>
 
       {loading ? (
@@ -77,6 +80,7 @@ export default function EventsPage() {
           No events found.
         </p>
       ) : (
+       
         <motion.div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
           initial="hidden"
@@ -88,7 +92,7 @@ export default function EventsPage() {
               transition: { staggerChildren: 0.1 },
             },
           }}
-        >
+        > 
           {events.map((e) => (
             <motion.div
               key={e.id}
