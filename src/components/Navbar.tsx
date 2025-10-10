@@ -25,7 +25,7 @@ export default function NavBar() {
           </span>
         </Link>
 
-        {/* ONLY CHANGED THIS SECTION - Center the navigation links */}
+       
         <div className="hidden sm:flex items-center gap-4 absolute left-1/2 transform -translate-x-1/2">
           <Link to="/events" className="text-sm text-muted-foreground hover:text-foreground">
             Events

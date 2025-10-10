@@ -240,7 +240,7 @@ useEffect(() => {
               <Button
                 variant="ghost"
                 className="rounded-full"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate('/events')}
               >
                 <ArrowLeft className="w-4 h-4 mr-1" /> Back
               </Button>

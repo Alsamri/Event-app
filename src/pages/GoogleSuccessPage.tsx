@@ -12,7 +12,6 @@ export default function GoogleSuccessPage() {
   const navigate = useNavigate();
   const api = useApi();
   const [loading, setLoading] = useState(true);
-  const [success, setSuccess] = useState(false);
   const [eventAdded, setEventAdded] = useState(false);
 
   useEffect(() => {
@@ -21,16 +20,14 @@ export default function GoogleSuccessPage() {
         const pendingEventId = localStorage.getItem('pendingCalendarEvent');
         
         if (pendingEventId) {
-          console.log("Adding pending event to calendar:", pendingEventId);
+         
           await addEventToCalendar(api, parseInt(pendingEventId));
           setEventAdded(true);
           toast.success("Event added to your Google Calendar!");
           localStorage.removeItem('pendingCalendarEvent');
-        } else {
-          console.log("No pending event found");
-        }
+        } 
+    
         
-        setSuccess(true);
       } catch (err: any) {
         console.error("Failed to add event to calendar:", err);
         if (err.response?.status === 400) {

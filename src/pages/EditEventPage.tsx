@@ -41,19 +41,6 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
-type Event = {
-  id: number;
-  title: string;
-  description: string;
-  location: string;
-  startTime: string;
-  endTime: string;
-  isPaid?: boolean;
-  price?: number;
-  currency?: string;
-  capacity?: number;
-  category?: string;
-};
 
 export default function EditEventPage() {
   const { id } = useParams<{ id: string }>();
