@@ -24,9 +24,13 @@ export default function SearchBar({ initialQuery = "" }) {
         placeholder="Search events..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="rounded-full px-4 py-2"
+        className="rounded-full px-4 py-2 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 transition-all duration-200"
       />
-      <Button type="submit" size="icon" className="rounded-full">
+      <Button 
+        type="submit" 
+        size="icon" 
+        className="rounded-full dark:bg-gray-900/80 backdrop-blur-sm border-2 border-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 transition-all duration-200"
+      >
         <Search className="h-4 w-4" />
       </Button>
     </form>

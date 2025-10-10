@@ -39,7 +39,6 @@ export function JoinEventModal({
   open,
   onOpenChange,
   event,
-  onSuccess
 }: JoinEventModalProps) {
   const api = useApi();
   const stripe = useStripe();
