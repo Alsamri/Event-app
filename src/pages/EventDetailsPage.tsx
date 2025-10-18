@@ -40,6 +40,7 @@ type Event = {
   location: string;
   startTime: string;
   endTime: string;
+   payWhatYouFeel?: boolean;
   isPaid?: boolean;
   price?: number;
   currency?: string;
@@ -53,7 +54,6 @@ export default function EventDetailsPage() {
   const { isSignedIn, userId } = useAuth();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
- 
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -284,15 +284,19 @@ useEffect(() => {
 
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
               <div className="flex items-center gap-4">
-                {event.isPaid ? (
-                  <Badge variant="secondary" className="text-base py-2 px-4">
-                    💳 {event.price} {event.currency?.toUpperCase()}
-                  </Badge>
-                ) : (
-                  <Badge variant="outline" className="text-base py-2 px-4">
-                    Free Event
-                  </Badge>
-                )}
+                {event.payWhatYouFeel ? (
+    <Badge variant="secondary" className="text-base py-2 px-4 bg-orange-100 text-orange-700 border-orange-300">
+      💝 Pay What You Feel
+    </Badge>
+  ) : event.isPaid ? (
+    <Badge variant="secondary" className="text-base py-2 px-4">
+      💳 {event.price} {event.currency?.toUpperCase()}
+    </Badge>
+  ) : (
+    <Badge variant="outline" className="text-base py-2 px-4">
+      Free Event
+    </Badge>
+  )}
                 
                 
                 {isStaff && (
