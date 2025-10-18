@@ -21,7 +21,7 @@ export default function NavBar() {
             E
           </div>
           <span className="font-semibold text-foreground">
-            Event Platform
+            EventX
           </span>
         </Link>
 
@@ -30,20 +30,28 @@ export default function NavBar() {
           <Link to="/events" className="text-sm text-muted-foreground hover:text-foreground">
             Events
           </Link>
-          <Link to="/my-events" className="text-sm text-muted-foreground hover:text-foreground">
-            My Events
-          </Link>
+          
+         
+          <SignedIn>
+            <Link to="/my-events" className="text-sm text-muted-foreground hover:text-foreground">
+              My Events
+            </Link>
+          </SignedIn>
         </div>
 
+      
         <div className="flex items-center gap-2">
+       
           <div className="hidden md:block w-64">
             <SearchBar />
           </div>
 
+          
           <div className="hidden sm:block">
             <CreateEventNavButton />
           </div>
 
+         
           <SignedOut>
             <div className="hidden sm:flex gap-2">
               <SignInButton>
@@ -58,6 +66,7 @@ export default function NavBar() {
             <UserButton afterSignOutUrl="/" />
           </SignedIn>
 
+         
           <div className="sm:hidden">
             <Sheet>
               <SheetTrigger asChild>
@@ -68,6 +77,7 @@ export default function NavBar() {
               <SheetContent side="right" className="w-[240px] sm:w-[240px]"> 
                 <div className="flex flex-col h-100 justify-center"> 
                   <div className="space-y-6 text-center"> 
+                   
                     <Link 
                       to="/events" 
                       className="flex items-center justify-center gap-3 p-4 rounded-lg hover:bg-accent transition-colors text-lg font-medium"
@@ -76,20 +86,25 @@ export default function NavBar() {
                       <span>All Events</span>
                     </Link>
                     
-                    <Link 
-                      to="/my-events" 
-                      className="flex items-center justify-center gap-3 p-4 rounded-lg hover:bg-accent transition-colors text-lg font-medium"
-                    >
-                      <Calendar className="h-5 w-5" />
-                      <span>My Events</span>
-                    </Link>
+                    
+                    <SignedIn>
+                      <Link 
+                        to="/my-events" 
+                        className="flex items-center justify-center gap-3 p-4 rounded-lg hover:bg-accent transition-colors text-lg font-medium"
+                      >
+                        <Calendar className="h-5 w-5" />
+                        <span>My Events</span>
+                      </Link>
+                    </SignedIn>
 
+                   
                     <SignedIn>
                       <div className="pt-4">
                        <CreateEventNavButton />
                       </div>
                     </SignedIn>
 
+                    
                     <SignedOut>
                       <div className="space-y-3 pt-4">
                         <SignInButton>

@@ -34,6 +34,7 @@ import {
   Globe,
   Zap,
   ArrowLeft,
+  Heart,
 } from "lucide-react";
 import { format, setHours, setMinutes, parseISO } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -56,6 +57,7 @@ export default function EditEventPage() {
     endDate: new Date(),
     endTime: "17:00",
     isPaid: false,
+     payWhatYouFeel: false,
     price: "",
     currency: "USD",
     capacity: "",
@@ -77,20 +79,21 @@ export default function EditEventPage() {
         const startDate = parseISO(eventData.startTime);
         const endDate = parseISO(eventData.endTime);
         
-        setForm({
-          title: eventData.title || "",
-          description: eventData.description || "",
-          location: eventData.location || "",
-          startDate,
-          startTime: format(startDate, "HH:mm"),
-          endDate,
-          endTime: format(endDate, "HH:mm"),
-          isPaid: eventData.isPaid || false,
-          price: eventData.price?.toString() || "",
-          currency: eventData.currency || "USD",
-          capacity: eventData.capacity?.toString() || "",
-          category: eventData.category || "general",
-        });
+       setForm({
+  title: eventData.title || "",
+  description: eventData.description || "",
+  location: eventData.location || "",
+  startDate,
+  startTime: format(startDate, "HH:mm"),
+  endDate,
+  endTime: format(endDate, "HH:mm"),
+  isPaid: eventData.isPaid || false,
+  payWhatYouFeel: eventData.payWhatYouFeel || false, 
+  price: eventData.price?.toString() || "",
+  currency: eventData.currency || "USD",
+  capacity: eventData.capacity?.toString() || "",
+  category: eventData.category || "general",
+});
       } catch (err) {
         console.error("Error fetching event:", err);
         toast.error("Could not load event data.");
@@ -140,20 +143,18 @@ export default function EditEventPage() {
     }
 
     const payload = {
-      title: form.title,
-      description: form.description,
-      location: form.location,
-      startTime: startTime.toISOString(),
-      endTime: endTime.toISOString(),
-      isPaid: form.isPaid,
-      price: form.isPaid && form.price ? Number(form.price) : undefined,
-      currency: form.isPaid ? form.currency : undefined,
-      capacity: form.capacity ? Number(form.capacity) : undefined,
-      category: form.category,
-    };
-
- 
-    
+  title: form.title,
+  description: form.description,
+  location: form.location,
+  startTime: startTime.toISOString(),
+  endTime: endTime.toISOString(),
+  isPaid: form.isPaid,
+  payWhatYouFeel: form.payWhatYouFeel, 
+  price: form.isPaid && !form.payWhatYouFeel && form.price ? Number(form.price) : undefined,
+  currency: form.isPaid && !form.payWhatYouFeel ? form.currency : undefined,
+  capacity: form.capacity ? Number(form.capacity) : undefined,
+  category: form.category,
+};
 
     await updateEvent(api, Number(id), payload);
     
@@ -204,8 +205,6 @@ export default function EditEventPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-100/20 dark:from-slate-950 dark:via-blue-950/20 dark:to-indigo-950/10 py-8 px-4">
       <div className="max-w-4xl mx-auto">
-      
-       
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -470,102 +469,161 @@ export default function EditEventPage() {
                   )}
 
                   {currentStep === 3 && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="space-y-6"
-                    >
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-2xl border"
-                      >
-                        <div className="flex items-center gap-3">
-                          <DollarSign className="w-5 h-5 text-green-600" />
-                          <div>
-                            <Label className="font-semibold">Paid Event</Label>
-                            <p className="text-sm text-muted-foreground">
-                              Charge attendees for this event
-                            </p>
-                          </div>
-                        </div>
-                        <Switch
-                          checked={form.isPaid}
-                          onCheckedChange={(checked) => handleChange("isPaid", checked)}
-                          className="data-[state=checked]:bg-green-600"
-                        />
-                      </motion.div>
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    className="space-y-6"
+  >
+    {/* Paid Event Toggle */}
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="space-y-4"
+    >
+      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-2xl border">
+        <div className="flex items-center gap-3">
+          <DollarSign className="w-5 h-5 text-green-600" />
+          <div>
+            <Label className="font-semibold">Paid Event</Label>
+            <p className="text-sm text-muted-foreground">
+              Charge attendees for this event
+            </p>
+          </div>
+        </div>
+        <Switch
+          checked={form.isPaid}
+          onCheckedChange={(checked) => {
+            handleChange("isPaid", checked);
+            if (!checked) {
+              handleChange("payWhatYouFeel", false);
+            }
+          }}
+          className="data-[state=checked]:bg-green-600"
+        />
+      </div>
 
-                      <AnimatePresence>
-                        {form.isPaid && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="grid gap-4 md:grid-cols-3"
-                          >
-                            <motion.div
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              className="flex flex-col space-y-2"
-                            >
-                              <Label>Price</Label>
-                              <div className="relative">
-                                <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                                <Input
-                                  type="number"
-                                  placeholder="0.00"
-                                  value={form.price}
-                                  onChange={(e) => handleChange("price", e.target.value)}
-                                  className="pl-9 h-12 rounded-xl border-2 focus:border-green-500 transition-colors"
-                                />
-                              </div>
-                            </motion.div>
+      {/* Pay What You Feel Option */}
+      <AnimatePresence>
+        {form.isPaid && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 rounded-2xl border"
+          >
+            <div className="flex items-center gap-3">
+              <Heart className="w-5 h-5 text-orange-600" />
+              <div>
+                <Label className="font-semibold">Pay What You Feel</Label>
+                <p className="text-sm text-muted-foreground">
+                  Let attendees choose their own price
+                </p>
+              </div>
+            </div>
+            <Switch
+              checked={form.payWhatYouFeel}
+              onCheckedChange={(checked) => {
+                handleChange("payWhatYouFeel", checked);
+                if (checked) {
+                  handleChange("price", ""); // Clear fixed price
+                }
+              }}
+              className="data-[state=checked]:bg-orange-600"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
 
-                            <motion.div
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              className="flex flex-col space-y-2"
-                            >
-                              <Label>Currency</Label>
-                              <Select
-                                value={form.currency}
-                                onValueChange={(v) => handleChange("currency", v)}
-                              >
-                                <SelectTrigger className="h-12 rounded-xl border-2 focus:border-green-500 transition-colors">
-                                  <SelectValue placeholder="Currency" />
-                                </SelectTrigger>
-                                <SelectContent className="rounded-xl">
-                                  <SelectItem value="USD">USD ($)</SelectItem>
-                                  <SelectItem value="EUR">EUR (€)</SelectItem>
-                                  <SelectItem value="GBP">GBP (£)</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </motion.div>
+    <AnimatePresence>
+      {form.isPaid && !form.payWhatYouFeel && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          className="grid gap-4 md:grid-cols-3"
+        >
+          {/* Fixed Price Fields */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex flex-col space-y-2"
+          >
+            <Label>Price</Label>
+            <div className="relative">
+              <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="number"
+                placeholder="0.00"
+                value={form.price}
+                onChange={(e) => handleChange("price", e.target.value)}
+                className="pl-9 h-12 rounded-xl border-2 focus:border-green-500 transition-colors"
+              />
+            </div>
+          </motion.div>
 
-                            <motion.div
-                              initial={{ opacity: 0, x: 20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              className="flex flex-col space-y-2"
-                            >
-                              <Label className="flex items-center gap-2">
-                                <Users className="w-4 h-4" />
-                                Capacity
-                              </Label>
-                              <Input
-                                type="number"
-                                placeholder="Unlimited"
-                                value={form.capacity}
-                                onChange={(e) => handleChange("capacity", e.target.value)}
-                                className="h-12 rounded-xl border-2 focus:border-blue-500 transition-colors"
-                              />
-                            </motion.div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.div>
-                  )}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col space-y-2"
+          >
+            <Label>Currency</Label>
+            <Select
+              value={form.currency}
+              onValueChange={(v) => handleChange("currency", v)}
+            >
+              <SelectTrigger className="h-12 rounded-xl border-2 focus:border-green-500 transition-colors">
+                <SelectValue placeholder="Currency" />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl">
+                <SelectItem value="USD">USD ($)</SelectItem>
+                <SelectItem value="EUR">EUR (€)</SelectItem>
+                <SelectItem value="GBP">GBP (£)</SelectItem>
+              </SelectContent>
+            </Select>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex flex-col space-y-2"
+          >
+            <Label className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              Capacity
+            </Label>
+            <Input
+              type="number"
+              placeholder="Unlimited"
+              value={form.capacity}
+              onChange={(e) => handleChange("capacity", e.target.value)}
+              className="h-12 rounded-xl border-2 focus:border-blue-500 transition-colors"
+            />
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+
+    {/* Pay What You Feel Message */}
+    <AnimatePresence>
+      {form.isPaid && form.payWhatYouFeel && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="p-4 bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800 rounded-2xl text-center"
+        >
+          <Badge variant="outline" className="mb-2 bg-orange-100 text-orange-700 border-orange-300">
+            💝 Pay What You Feel
+          </Badge>
+          <p className="text-sm text-orange-700 dark:text-orange-300">
+            Attendees will be able to choose their own price when joining this event.
+          </p>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </motion.div>
+)}
                 </AnimatePresence>
               </CardContent>
 
