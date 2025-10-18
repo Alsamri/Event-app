@@ -5,21 +5,21 @@ import { listEvents } from "@/services/eventService";
 import {
   Card,
   CardContent,
-  CardHeader,
+  
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { CreateEventSidebarButton } from "@/components/CreateEventButton";
 import SearchBar from "@/components/SearchBar";
-import { MapPin, Calendar, Users, Filter, X, DollarSign, Clock, ChevronDown } from "lucide-react";
+import { MapPin, Calendar, Filter, X, DollarSign, Clock, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+ 
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
