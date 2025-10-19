@@ -1,14 +1,13 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useApi } from "@/lib/useApi";
-import { listMyEvents } from "@/services/signupService";
-import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { motion, AnimatePresence } from "framer-motion";
+import { CalendarDays, MapPin, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { CalendarDays, MapPin, ArrowRight, Calendar } from "lucide-react";
+import { useApi } from "@/lib/useApi";
+import { listMyEvents } from "@/services/signupService";
 import { toast } from "sonner";
 
 type Event = {
@@ -21,163 +20,150 @@ type Event = {
   isPaid?: boolean;
   price?: number;
   currency?: string;
-  addedToCalendar?: boolean;
-  googleEventId?: string;
 };
 
 export default function MyEventsPage() {
-  const api = useApi();
-  const navigate = useNavigate();
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const api = useApi();
 
   useEffect(() => {
-    async function loadMyEvents() {
+    async function fetchEvents() {
       try {
         setLoading(true);
         const data = await listMyEvents(api);
         setEvents(data);
-        
-        
       } catch (err) {
-        console.error("Error fetching my events:", err);
-        toast.error("Could not load your events.");
+        toast.error("Failed to load events");
       } finally {
         setLoading(false);
       }
     }
-
-    loadMyEvents();
+    fetchEvents();
   }, [api]);
 
-  const formatEventTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+  const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
     });
-  };
-
-  if (loading) {
-    return (
-      <main className="max-w-6xl mx-auto p-6 space-y-6">
-        <Skeleton className="h-10 w-64" />
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {[...Array(6)].map((_, i) => (
-            <Skeleton key={i} className="h-80 rounded-xl" />
-          ))}
-        </div>
-      </main>
-    );
-  }
 
   return (
-    <motion.main
-      className="max-w-6xl mx-auto p-6 space-y-8"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
-    >
-      
-      <motion.div
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="text-center space-y-4"
-      >
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          My Events
-        </h1>
-        <p className="text-muted-foreground text-lg">
-          Events you've signed up for and are attending
-        </p>
-        <Badge variant="secondary" className="text-sm">
-          {events.length} {events.length === 1 ? 'Event' : 'Events'}
-        </Badge>
-      </motion.div>
-
-     
-      {events.length === 0 ? (
+    <main className="min-h-screen bg-background/50 backdrop-blur-sm">
+      <div className="max-w-7xl mx-auto px-6 py-16 space-y-12">
+        
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center py-16"
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex flex-col items-center text-center space-y-4"
         >
-          <Calendar className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-          <h3 className="text-xl font-semibold mb-2">No events yet</h3>
-          <p className="text-muted-foreground mb-6">
-            You haven't signed up for any events yet.
+          <span className="inline-flex items-center gap-2 rounded-full border border-border/60 px-4 py-1.5 text-sm text-muted-foreground bg-muted/40 backdrop-blur">
+            <CalendarDays className="w-4 h-4" /> My Events
+          </span>
+          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-foreground">
+            Your Upcoming Experiences
+          </h1>
+          <p className="text-muted-foreground max-w-2xl">
+            Manage your event registrations, explore details, and relive your moments.
           </p>
-          <Button 
-            onClick={() => navigate("/events")}
-            className="bg-gradient-to-r from-blue-600 to-purple-600"
+        </motion.div>
+
+      
+        {loading && (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[...Array(6)].map((_, i) => (
+              <Skeleton key={i} className="h-64 rounded-xl" />
+            ))}
+          </div>
+        )}
+
+      
+        {!loading && events.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex flex-col items-center justify-center py-24 text-center"
           >
-            Browse Events
-          </Button>
-        </motion.div>
-      ) : (
-        <motion.div 
-          className="grid gap-6 md:grid-cols-2 lg:grid-cols-3"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          {events.map((event, index) => (
-            <motion.div
-              key={event.eventId}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
+            <CalendarDays className="w-12 h-12 text-muted-foreground mb-4" />
+            <h2 className="text-2xl font-medium mb-2">No events yet</h2>
+            <p className="text-muted-foreground mb-6">
+              You haven’t signed up for any events. Start discovering experiences today.
+            </p>
+            <Button
+              onClick={() => navigate("/events")}
+              className="bg-primary text-primary-foreground hover:bg-primary/90 transition-all"
             >
-              <Card className="h-full backdrop-blur-md bg-white/70 dark:bg-black/40 border border-border/40 hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
-                <CardHeader className="pb-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <Badge variant={event.isPaid ? "default" : "secondary"}>
-                      {event.isPaid ? `$${event.price}` : "Free"}
-                    </Badge>
-                    {event.addedToCalendar && (
-                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                        ✅ Calendar
-                      </Badge>
-                    )}
-                  </div>
-                  <CardTitle className="text-xl line-clamp-2">
-                    {event.title}
-                  </CardTitle>
-                </CardHeader>
-                
-                <CardContent className="space-y-4">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <CalendarDays className="w-4 h-4" />
-                      <span>{formatEventTime(event.startTime)}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <MapPin className="w-4 h-4" />
-                      <span className="line-clamp-1">{event.location}</span>
-                    </div>
-                  </div>
+              Browse Events
+            </Button>
+          </motion.div>
+        )}
 
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {event.description || "No description available."}
-                  </p>
+       
+        <AnimatePresence>
+          {!loading && events.length > 0 && (
+            <motion.div
+              layout
+              className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.1 }}
+            >
+              {events.map((event, i) => (
+                <motion.div
+                  key={event.eventId}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05, duration: 0.3 }}
+                >
+                  <Card className="relative group border border-border/60 bg-card/60 backdrop-blur-md hover:bg-card/80 transition-all duration-300 rounded-2xl shadow-sm hover:shadow-md">
+                   
+                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/0 via-primary/5 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                  <Button 
-                    onClick={() => navigate(`/events/${event.eventId}`)}
-                    variant="outline" 
-                    className="w-full group"
-                  >
-                    View Details
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </CardContent>
-              </Card>
+                    <CardHeader>
+                      <div className="flex justify-between items-start">
+                        <Badge
+                          variant="secondary"
+                          className="px-2 py-1 rounded-md text-xs font-medium"
+                        >
+                          {event.isPaid ? `$${event.price}` : "Free"}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">
+                          {formatDate(event.startTime)}
+                        </span>
+                      </div>
+                      <CardTitle className="mt-3 text-lg font-semibold leading-snug group-hover:text-primary transition-colors">
+                        {event.title}
+                      </CardTitle>
+                    </CardHeader>
+
+                    <CardContent className="space-y-4 text-sm text-muted-foreground">
+                      <p className="line-clamp-3">{event.description}</p>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <MapPin className="w-4 h-4" />
+                        {event.location || "TBA"}
+                      </div>
+
+                      <Button
+                        onClick={() => navigate(`/events/${event.eventId}`)}
+                        variant="outline"
+                        className="w-full group-hover:border-primary transition-colors flex items-center justify-center gap-2"
+                      >
+                        View Details
+                        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
             </motion.div>
-          ))}
-        </motion.div>
-      )}
-    </motion.main>
+          )}
+        </AnimatePresence>
+      </div>
+    </main>
   );
 }
