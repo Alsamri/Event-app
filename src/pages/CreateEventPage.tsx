@@ -586,3 +586,4 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
     </main>
   );
 }
+
