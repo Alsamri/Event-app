@@ -1,7 +1,7 @@
 # Event Platform Frontend
 
 This is the frontend for the **Event Platform** — a small app where community members can browse, sign up for, and pay for events.  
-It connects to the backend API (`Event Platform API`) and handles authentication with **Clerk**, payments through **Stripe**, and event display and **Shadcn/UI** for all components and UI.
+It connects to the backend API (`Event Platform API`) and handles authentication with **Clerk**, payments through **Stripe**, and event display and **Shadcn/UI** for all components and UI, **GoogleAPIs** for Google Calendar integration.
 
 LIVE WEBSITE: `https://aloisalamri.xyz`
 ---
@@ -36,7 +36,7 @@ You’ll need:
    ```bash
    git clone https://github.com/yourusername/event-platform-frontend.git
    cd event-platform-frontend
-````
+``
 
 2. **Install dependencies**
 
