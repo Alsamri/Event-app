@@ -80,7 +80,7 @@ export function CreateEventButton({
   };
 
   
-  const gradientStyles = "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25";
+  const gradientStyles = "bg-gradient-to-r from-pink-600 to-purple-400 hover:from-pink-700 hover:to-purple-600 text-white shadow-lg shadow-blue-500/25";
 
   const buttonContent = (
     <Button
@@ -121,7 +121,7 @@ export function CreateEventFAB() {
     <CreateEventButton
       size="icon"
       showLabel={false}
-      className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-2xl shadow-blue-500/25 border-0"
+      className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-gradient-to-r from-pink-600 to-purple-400 hover:from-pink-700 hover:to-purple-600 text-white shadow-2xl shadow-blue-500/25 border-0"
       animate={true}
     />
   );
@@ -133,7 +133,7 @@ export function CreateEventNavButton() {
     <CreateEventButton
       showIcon={true}
       showLabel={true}
-      className="rounded-full px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg shadow-blue-500/25"
+      className="rounded-full px-6 bg-gradient-to-r from-pink-600 to-purple-400 hover:from-pink-700 hover:to-purple-600 text-white shadow-lg shadow-blue-500/25"
       animate={false}
     />
   );
