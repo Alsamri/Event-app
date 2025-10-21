@@ -497,7 +497,7 @@ export default function EventsPage() {
                   <CardContent className="p-6 space-y-4">
                    
                     <div className="space-y-3">
-                      <CardTitle className="text-xl font-bold line-clamp-2 group-hover:text-blue-600 transition-colors">
+                      <CardTitle className="text-xl font-bold line-clamp-2 group-hover:text-pink-600 transition-colors">
                         {event.title}
                       </CardTitle>
                       <CardDescription className="line-clamp-3 text-muted-foreground leading-relaxed">
@@ -526,7 +526,7 @@ export default function EventsPage() {
 
                   
                     <Button
-                      className="w-full rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/25"
+                      className="w-full rounded-full bg-gradient-to-r from-pink-400 to-purple-200 hover:from-pink-600 hover:to-purple-400 shadow-lg shadow-pink-500/25"
                       size="lg"
                     >
                       View Event Details

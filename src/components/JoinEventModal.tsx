@@ -98,13 +98,12 @@ export function JoinEventModal({
           setCurrentStep("payment");
         }
       } else {
-        // Free event - sign up and show success with calendar option
+    
         await signupEvent(api, event.id);
         console.log("Free event signup successful, showing calendar option");
         setCurrentStep("success");
         toast.success("Successfully joined the event!");
-        // Don't call onSuccess yet - wait until modal closes
-        // onSuccess?.();
+    
       }
     } catch (err) {
       console.error("Checkout error:", err);
@@ -132,8 +131,7 @@ export function JoinEventModal({
         console.log("Payment successful, showing calendar option");
         setCurrentStep("success");
         toast.success("Payment successful! You've joined the event.");
-        // Don't call onSuccess yet - wait until modal closes
-        // onSuccess?.();
+      
       }
     } catch (err) {
       console.error("Payment error:", err);
@@ -149,7 +147,7 @@ export function JoinEventModal({
       setCalendarError(null);
       await addEventToCalendar(api, event.id);
       toast.success("Event added to your Google Calendar!");
-      onSuccess?.(); // Refresh data after adding to calendar
+      onSuccess?.();
       onOpenChange(false);
     } catch (err: any) {
       console.error("Calendar error:", err);
@@ -171,7 +169,7 @@ export function JoinEventModal({
       setLoading(true);
       const { url } = await getGoogleAuthUrl(api);
       
-      // Store event ID to add to calendar after auth
+      
       sessionStorage.setItem('pendingCalendarEvent', event.id.toString());
       
       window.location.href = url;
@@ -183,7 +181,7 @@ export function JoinEventModal({
   };
 
   const handleSkipCalendar = () => {
-    onSuccess?.(); // Refresh data when closing
+    onSuccess?.(); 
     onOpenChange(false);
   };
 
@@ -236,7 +234,7 @@ export function JoinEventModal({
                   </p>
                 </div>
 
-                {/* Pay What You Feel Amount Input */}
+               
                 {event.isPaid && event.payWhatYouFeel && (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
@@ -276,7 +274,7 @@ export function JoinEventModal({
                 <Button 
                   onClick={handleCheckout} 
                   disabled={loading || (event.payWhatYouFeel && (!customAmount || Number(customAmount) <= 0))}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  className="w-full bg-gradient-to-r from-pink-400 to-purple-200 hover:from-pink-600 hover:to-purple-400"
                   size="lg"
                 >
                   {loading ? "Processing..." : 

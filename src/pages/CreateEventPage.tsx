@@ -128,7 +128,7 @@ export default function CreateEventPage() {
   ];
 const CurrentStepIcon = steps[currentStep - 1].icon;
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-100/20 dark:from-slate-950 dark:via-blue-950/20 dark:to-indigo-950/10 py-8 px-4">
+    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-pink-50/30 to-indigo-100/20 dark:from-slate-950 dark:via-pink-950/20 dark:to-indigo-950/10 py-8 px-4">
       <div className="max-w-4xl mx-auto">
       
         <motion.div
@@ -141,14 +141,14 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
             animate={{ scale: 1 }}
             className="inline-flex items-center gap-2 mb-4"
           >
-            <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
+            <div className="p-2 bg-gradient-to-r from-pink-500 to-pink-400 rounded-lg">
               <Sparkles className="h-6 w-6 text-white" />
             </div>
             <Badge variant="secondary" className="text-sm">
               
             </Badge>
           </motion.div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-blue-600 to-purple-600 bg-clip-text text-transparent dark:from-gray-100 dark:via-blue-400 dark:to-purple-400 mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-900 via-pink-600 to-purple-600 bg-clip-text text-transparent dark:from-gray-100 dark:via-blue-400 dark:to-purple-400 mb-2">
             Create New Event
           </h1>
           <p className="text-muted-foreground text-lg">
@@ -172,7 +172,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
                     className={cn(
                       "flex items-center justify-center w-10 h-10 rounded-full font-semibold text-sm transition-all duration-300",
                       currentStep >= step.id
-                        ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25"
+                        ? "bg-gradient-to-r from-pink-500 to-pink-600 text-white shadow-lg shadow-pink-500/25"
                         : "bg-gray-100 dark:bg-gray-800 text-gray-400"
                     )}
                     whileHover={{ scale: 1.05 }}
@@ -189,7 +189,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
                   {index < steps.length - 1 && (
                     <div className={cn(
                       "w-8 h-0.5 mx-2",
-                      currentStep > step.id ? "bg-gradient-to-r from-blue-500 to-purple-600" : "bg-gray-200 dark:bg-gray-700"
+                      currentStep > step.id ? "bg-gradient-to-r from-pink-500 to-pink-600" : "bg-gray-200 dark:bg-gray-700"
                     )} />
                   )}
                 </div>
@@ -553,7 +553,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
                     <Button
                       type="button"
                       onClick={nextStep}
-                      className="rounded-full px-8 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg shadow-blue-500/25"
+                      className="rounded-full px-8 bg-gradient-to-r from-pink-400 to-purple-300 hover:from-pink-600 hover:to-purple-400 shadow-lg shadow-blue-500/25"
                     >
                       Continue
                     </Button>

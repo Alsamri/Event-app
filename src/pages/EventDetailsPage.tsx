@@ -336,7 +336,7 @@ useEffect(() => {
       <Button
         size="lg"
         onClick={() => setShowModal(true)}
-        className="rounded-full shadow-md w-full sm:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+        className="rounded-full shadow-md w-full sm:w-auto bg-gradient-to-r from-pink-400 to-purple-200 hover:from-pink-600 hover:to-purple-400"
       >
         Join Event
       </Button>
