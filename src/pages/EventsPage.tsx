@@ -183,13 +183,13 @@ export default function EventsPage() {
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-      {/* Hero Header */}
+      
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center space-y-4"
       >
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-pink-600 to-pink-200 bg-clip-text text-transparent">
           Discover Amazing Events
         </h1>
         <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
