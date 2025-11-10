@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -14,7 +14,7 @@ import EditEventPage from "./pages/EditEventPage";
 import GoogleSuccessPage from "./pages/GoogleSuccessPage";
 import MyEventsPage from "./pages/MyEventPage";
 
-function AppContent() {
+function App() {
   const location = useLocation();
 
   return (
@@ -58,14 +58,6 @@ function AppContent() {
       </AnimatePresence>
       <Toaster />
     </div>
-  );
-}
-
-function App() {
-  return (
-    <Router>
-      <AppContent />
-    </Router>
   );
 }
 
