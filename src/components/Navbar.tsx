@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import {
   SignedIn,
   SignedOut,
+  SignInButton,
+  SignUpButton,
   UserButton,
 } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
@@ -53,7 +55,6 @@ export default function NavBar() {
 
       
         <div className="flex items-center gap-3">
-          {/* Search Bar - Desktop */}
           <div className="hidden md:block">
             <SearchBar />
           </div>
@@ -67,14 +68,14 @@ export default function NavBar() {
 
           <SignedOut>
             <div className="hidden sm:flex items-center gap-2">
-                <Link to="/login">
-                <Button variant="ghost" size="sm">Sign in</Button>
-              </Link>
-              <Link to="/signup">
-                <Button size="sm" className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700">
-                  Sign up
-                </Button>
-              </Link>
+               <SignInButton mode="modal">
+      <Button variant="ghost" size="sm">Sign in</Button>
+    </SignInButton>
+    <SignUpButton mode="modal">
+      <Button size="sm" className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700">
+        Sign up
+      </Button>
+    </SignUpButton>
             </div>
           </SignedOut>
 
@@ -122,18 +123,15 @@ export default function NavBar() {
 
                     <SignedOut>
                       <div className="space-y-3 pt-4">
-                        
-                        <Link to="/login">
-                          <Button variant="outline" className="w-full max-w-[200px] mx-auto">
-                            Sign In
-                          </Button>
-                        </Link>
-                        <Link to="/signup">
-                          <Button className="w-full max-w-[200px] mx-auto">
-                            Sign Up
-                          </Button>
-                        </Link>
-                      </div>
+               <SignInButton mode="modal">
+      <Button variant="ghost" size="sm" className="w-full max-w-[200px] mx-auto">Sign in</Button>
+    </SignInButton>
+    <SignUpButton mode="modal">
+      <Button size="sm" className="w-full max-w-[200px] mx-auto">
+        Sign up
+      </Button>
+    </SignUpButton>
+            </div>
                     </SignedOut>
                   </div>
                 </div>
