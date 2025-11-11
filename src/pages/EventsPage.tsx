@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { CreateEventSidebarButton } from "@/components/CreateEventButton";
 import SearchBar from "@/components/SearchBar";
-import { MapPin, Calendar, Filter, X, DollarSign, Clock, ChevronDown } from "lucide-react";
+import { MapPin, Calendar, Filter, DollarSign, Clock, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -214,12 +214,14 @@ export default function EventsPage() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant={hasActiveFilters ? "default" : "outline"}
+            variant="outline"
             size="sm"
-            className="flex items-center gap-1.5 border bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm hover:bg-white dark:hover:bg-gray-800 transition-all duration-150 flex-1 sm:flex-none"
+            className="flex items-center gap-1.5 border bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm 
+hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-foreground transition-all duration-150 flex-1 sm:flex-none"
+
           >
             <Filter className="h-3.5 w-3.5" />
-            Filters
+            <span className="text-foreground">Filters</span>
             {hasActiveFilters && (
               <Badge variant="secondary" className="ml-0.5 h-4 w-4 p-0 flex items-center justify-center bg-blue-500 text-white text-[10px]">
                 !
@@ -328,47 +330,58 @@ export default function EventsPage() {
             </div>
           </div>
 
-       
-          {hasActiveFilters && (
-            <>
-              <DropdownMenuSeparator className="my-2" />
-              <div className="space-y-1.5">
-                <Label className="text-xs font-semibold px-1">Active Filters:</Label>
-                <div className="flex flex-wrap gap-1">
-                  {filters.location !== "all" && (
-                    <Badge variant="secondary" className="flex items-center gap-1 text-xs h-5 px-1.5">
-                      <MapPin className="h-2.5 w-2.5" />
-                      {filters.location}
-                      <X 
-                        className="h-2.5 w-2.5 ml-0.5 cursor-pointer" 
-                        onClick={() => setFilters(prev => ({ ...prev, location: "all" }))}
-                      />
-                    </Badge>
-                  )}
-                  {filters.priceType !== "all" && (
-                    <Badge variant="secondary" className="flex items-center gap-1 text-xs h-5 px-1.5">
-                      <DollarSign className="h-2.5 w-2.5" />
-                      {getFilterLabel("priceType", filters.priceType)}
-                      <X 
-                        className="h-2.5 w-2.5 ml-0.5 cursor-pointer" 
-                        onClick={() => setFilters(prev => ({ ...prev, priceType: "all" }))}
-                      />
-                    </Badge>
-                  )}
-                  {filters.dateRange !== "all" && (
-                    <Badge variant="secondary" className="flex items-center gap-1 text-xs h-5 px-1.5">
-                      <Calendar className="h-2.5 w-2.5" />
-                      {getFilterLabel("dateRange", filters.dateRange)}
-                      <X 
-                        className="h-2.5 w-2.5 ml-0.5 cursor-pointer" 
-                        onClick={() => setFilters(prev => ({ ...prev, dateRange: "all" }))}
-                      />
-                    </Badge>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
+       {hasActiveFilters && (
+  <>
+    <DropdownMenuSeparator className="my-2" />
+    <div className="space-y-1.5">
+      <Label className="text-xs font-semibold px-1">Active Filters:</Label>
+      <div className="flex flex-wrap gap-1">
+
+    
+        {filters.location !== "all" && (
+          <Badge
+            variant="secondary"
+            className="flex items-center gap-1 text-xs h-5 px-1.5 relative z-50"
+            onClick={(e) => e.stopPropagation()} 
+          >
+            <MapPin className="h-2.5 w-2.5" />
+            {filters.location}
+            
+          </Badge>
+        )}
+
+        
+        {filters.priceType !== "all" && (
+          <Badge
+            variant="secondary"
+            className="flex items-center gap-1 text-xs h-5 px-1.5 relative z-50"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <DollarSign className="h-2.5 w-2.5" />
+            {getFilterLabel("priceType", filters.priceType)}
+           
+          </Badge>
+        )}
+
+        
+        {filters.dateRange !== "all" && (
+          <Badge
+            variant="secondary"
+            className="flex items-center gap-1 text-xs h-5 px-1.5 relative z-50"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Calendar className="h-2.5 w-2.5" />
+            {getFilterLabel("dateRange", filters.dateRange)}
+            
+          </Badge>
+        )}
+
+      </div>
+    </div>
+  </>
+)}
+
+         
         </DropdownMenuContent>
       </DropdownMenu>
 

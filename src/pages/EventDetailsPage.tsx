@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApi } from "@/lib/useApi";
 import { getEvent, deleteEvent } from "@/services/eventService";
-import { listMyEvents} from "@/services/signupService";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { CalendarDays, MapPin, ArrowLeft, Edit, Trash2, MoreVertical, CheckCircle2 } from "lucide-react";
+import { CalendarDays, MapPin, ArrowLeft, Edit, Trash2, MoreVertical } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAuth } from "@clerk/clerk-react";
+import { SignInButton, useAuth } from "@clerk/clerk-react";
+
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { JoinEventModal } from "@/components/JoinEventModal";
@@ -51,7 +52,7 @@ export default function EventDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const api = useApi();
-  const { isSignedIn, userId } = useAuth();
+  const { isSignedIn, userId,isLoaded  } = useAuth();
   const [event, setEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -59,8 +60,8 @@ export default function EventDetailsPage() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
-const [isSignedUp, setIsSignedUp] = useState(false);
-const [checkingSignup, setCheckingSignup] = useState(true);
+
+
   useEffect(() => {
     async function loadEvent() {
       try {
@@ -103,14 +104,14 @@ useEffect(() => {
     if (!isSignedIn || !event) return;
     
     try {
-      const myEvents = await listMyEvents(api);
+     
     
-      const isUserSignedUp = myEvents.some((e: Event) => e.eventId === event.id);
-      setIsSignedUp(isUserSignedUp);
+      
+   
     } catch (err) {
       console.error("Error checking user signup:", err);
     } finally {
-      setCheckingSignup(false);
+      
     }
   }
 
@@ -324,31 +325,31 @@ useEffect(() => {
               </div>
 
               
-  {checkingSignup ? (
+<div className="flex items-center justify-center">
+  {!isLoaded ? (
+  
     <Skeleton className="h-10 w-32 rounded-full" />
-  ) : isSignedUp ? (
-    <div className="flex items-center gap-2 text-green-600 bg-green-50 dark:bg-green-900/20 px-4 py-2 rounded-full">
-      <CheckCircle2 className="w-4 h-4" />
-      <span className="font-medium">You're Going!</span>
-    </div>
+  ) : isSignedIn ? (
+  
+    <Button
+      size="lg"
+      onClick={() => setShowModal(true)}
+      className="rounded-full shadow-md w-full sm:w-auto bg-gradient-to-r from-pink-400 to-purple-200 hover:from-pink-600 hover:to-purple-400"
+    >
+      Join Event
+    </Button>
   ) : (
-    <>
+   
+    <SignInButton mode="modal">
       <Button
         size="lg"
-        onClick={() => setShowModal(true)}
-        className="rounded-full shadow-md w-full sm:w-auto bg-gradient-to-r from-pink-400 to-purple-200 hover:from-pink-600 hover:to-purple-400"
+        className="rounded-full shadow-md w-full sm:w-auto bg-gradient-to-r from-pink-300 to-pink-300 hover:from-pink-300 hover:to-pink-300"
       >
-        Join Event
+        Please sign in
       </Button>
-
-      <JoinEventModal
-        open={showModal}
-        onOpenChange={setShowModal}
-        event={event}
-        onSuccess={() => setIsSignedUp(true)} 
-      />
-    </>
+    </SignInButton>
   )}
+</div>
 </div>
 
           </CardContent>
@@ -377,6 +378,11 @@ useEffect(() => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+       <JoinEventModal
+        open={showModal}
+        onOpenChange={setShowModal}
+        event={event}
+      />
     </motion.main>
   );
 }
