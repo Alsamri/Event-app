@@ -95,6 +95,7 @@ export default function MyEventsPage() {
               You haven’t signed up for any events. Start discovering experiences today.
             </p>
             <Button
+            aria-label="event details"
               onClick={() => navigate("/events")}
               className="bg-primary text-primary-foreground hover:bg-primary/90 transition-all"
             >
@@ -149,6 +150,7 @@ export default function MyEventsPage() {
                       </div>
 
                       <Button
+                      aria-label="event details"
                         onClick={() => navigate(`/events/${event.eventId}`)}
                         variant="outline"
                         className="w-full group-hover:border-primary transition-colors flex items-center justify-center gap-2"

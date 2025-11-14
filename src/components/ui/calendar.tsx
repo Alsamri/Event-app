@@ -185,6 +185,7 @@ function CalendarDayButton({
 
   return (
     <Button
+    aria-label="next"
       ref={ref}
       variant="ghost"
       size="icon"

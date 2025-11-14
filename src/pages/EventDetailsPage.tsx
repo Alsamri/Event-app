@@ -238,7 +238,7 @@ useEffect(() => {
             </div>
             
             <div className="flex items-center gap-2">
-              <Button
+              <Button aria-label="event details"
                 variant="ghost"
                 className="rounded-full"
                 onClick={() => navigate('/events')}
@@ -250,7 +250,7 @@ useEffect(() => {
               {isStaff && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="rounded-full">
+                    <Button aria-label="event details" variant="ghost" size="icon" className="rounded-full">
                       <MoreVertical className="w-4 h-4" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -302,7 +302,7 @@ useEffect(() => {
                 
                 {isStaff && (
                   <div className="hidden sm:flex items-center gap-2">
-                    <Button
+                    <Button aria-label="event details"
                       variant="outline"
                       size="sm"
                       onClick={handleEdit}
@@ -311,7 +311,7 @@ useEffect(() => {
                       <Edit className="w-4 h-4 mr-1" />
                       Edit
                     </Button>
-                    <Button
+                    <Button aria-label="event details"
                       variant="outline"
                       size="sm"
                       onClick={() => setShowDeleteDialog(true)}
@@ -331,7 +331,7 @@ useEffect(() => {
     <Skeleton className="h-10 w-32 rounded-full" />
   ) : isSignedIn ? (
   
-    <Button
+    <Button aria-label="event details"
       size="lg"
       onClick={() => setShowModal(true)}
       className="rounded-full shadow-md w-full sm:w-auto bg-gradient-to-r from-pink-400 to-purple-200 hover:from-pink-600 hover:to-purple-400"
@@ -341,7 +341,7 @@ useEffect(() => {
   ) : (
    
     <SignInButton mode="modal">
-      <Button
+      <Button aria-label="event details"
         size="lg"
         className="rounded-full shadow-md w-full sm:w-auto bg-gradient-to-r from-pink-300 to-pink-300 hover:from-pink-300 hover:to-pink-300"
       >

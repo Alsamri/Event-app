@@ -257,6 +257,7 @@ export function JoinEventModal({
                         <Input
                           type="number"
                           placeholder="0.00"
+                          aria-label="Amount input"
                           value={customAmount}
                           onChange={(e) => setCustomAmount(e.target.value)}
                           className="pl-9 rounded-xl border-2 border-orange-300 focus:border-orange-500 transition-colors bg-white dark:bg-gray-800"
@@ -271,7 +272,8 @@ export function JoinEventModal({
                   </motion.div>
                 )}
 
-                <Button 
+                <Button
+                aria-label="payment button" 
                   onClick={handleCheckout} 
                   disabled={loading || (event.payWhatYouFeel && (!customAmount || Number(customAmount) <= 0))}
                   className="w-full bg-gradient-to-r from-pink-400 to-purple-200 hover:from-pink-600 hover:to-purple-400"
@@ -311,7 +313,8 @@ export function JoinEventModal({
                   }}
                   className="p-3 border rounded-lg bg-background"
                 />
-                <Button 
+                <Button
+                aria-label="payment button" 
                   onClick={handlePayment} 
                   disabled={loading || !stripe}
                   className="w-full"
@@ -353,7 +356,8 @@ export function JoinEventModal({
                 </div>
 
                 <div className="space-y-3">
-                  <Button 
+                  <Button
+                  aria-label="payment button" 
                     onClick={handleAddToCalendar}
                     disabled={loading}
                     className="w-full"
@@ -363,7 +367,8 @@ export function JoinEventModal({
                     {loading ? "Adding..." : "Add to Google Calendar"}
                   </Button>
                   
-                  <Button 
+                  <Button
+                  aria-label="payment button" 
                     variant="outline" 
                     onClick={handleSkipCalendar}
                     className="w-full"
@@ -404,7 +409,8 @@ export function JoinEventModal({
                 </p>
 
                 <div className="space-y-3">
-                  <Button 
+                  <Button
+                  aria-label="payment button" 
                     onClick={handleConnectGoogle}
                     disabled={loading}
                     className="w-full bg-white text-gray-900 border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700"
@@ -419,14 +425,16 @@ export function JoinEventModal({
                   </Button>
                   
                   <div className="flex gap-2">
-                    <Button 
+                    <Button
+                    aria-label="payment button" 
                       variant="outline" 
                       onClick={handleBackToCalendar}
                       className="flex-1"
                     >
                       Back
                     </Button>
-                    <Button 
+                    <Button
+                    aria-label="payment button" 
                       variant="outline" 
                       onClick={handleSkipCalendar}
                       className="flex-1"

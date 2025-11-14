@@ -21,12 +21,14 @@ export default function SearchBar({ initialQuery = "" }) {
     >
       <Input
         type="text"
+        aria-label="Search events input"
         placeholder="Search events..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="rounded-full px-4 py-2 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-2 border-gray-200 dark:border-gray-700 focus:border-blue-500 transition-all duration-200"
       />
       <Button 
+      aria-label="Search event"
         type="submit" 
         size="icon" 
         className="rounded-full dark:bg-gray-900/80 backdrop-blur-sm border-2 border-gray-200 dark:border-gray-700 dark:hover:bg-gray-800 transition-all duration-200"
