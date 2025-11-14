@@ -1,4 +1,4 @@
-import { Sparkles, Loader2 } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@clerk/clerk-react";
@@ -58,17 +58,7 @@ export function CreateEventButton({
 
 
   if (loading) {
-    return (
-      <Button
-        variant="outline"
-        size={size}
-        disabled
-        className={cn("opacity-70", className)}
-      >
-        <Loader2 className={cn("w-4 h-4 animate-spin", showLabel && "mr-2")} />
-        {showLabel && "Loading..."}
-      </Button>
-    );
+    return 
   }
 
   if (!user || user.role !== "staff") {
@@ -84,6 +74,7 @@ export function CreateEventButton({
 
   const buttonContent = (
     <Button
+    aria-label="create event"
       onClick={handleClick}
       variant={variant === "gradient" ? "default" : variant}
       size={size}

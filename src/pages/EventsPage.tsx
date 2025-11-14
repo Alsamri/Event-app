@@ -213,7 +213,7 @@ export default function EventsPage() {
    
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
+          <Button aria-label="all events and filters"
             variant="outline"
             size="sm"
             className="flex items-center gap-1.5 border bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm 
@@ -237,7 +237,7 @@ hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-foreground transition-all du
           <DropdownMenuLabel className="text-sm font-semibold flex items-center justify-between px-1">
             <span>Filter Events</span>
             {hasActiveFilters && (
-              <Button
+              <Button aria-label="all events and filters"
                 variant="ghost"
                 size="sm"
                 onClick={clearFilters}
@@ -256,7 +256,7 @@ hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-foreground transition-all du
               Location
             </Label>
             <div className="flex flex-wrap gap-1">
-              <Button
+              <Button aria-label="all events and filters"
                 variant={filters.location === "all" ? "default" : "outline"}
                 size="sm"
                 onClick={() => setFilters(prev => ({ ...prev, location: "all" }))}
@@ -265,7 +265,7 @@ hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-foreground transition-all du
                 All
               </Button>
               {locations.slice(0, 4).map(location => (
-                <Button
+                <Button aria-label="all events and filters"
                   key={location}
                   variant={filters.location === location ? "default" : "outline"}
                   size="sm"
@@ -290,7 +290,7 @@ hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-foreground transition-all du
                 { value: "paid", label: "Paid" },
                 { value: "payWhatYouWant", label: "Pay What You Want" }
               ].map(option => (
-                <Button
+                <Button aria-label="all events and filters"
                   key={option.value}
                   variant={filters.priceType === option.value ? "default" : "outline"}
                   size="sm"
@@ -317,7 +317,7 @@ hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-foreground transition-all du
                 { value: "month", label: "Month" },
                 { value: "upcoming", label: "Upcoming" }
               ].map(option => (
-                <Button
+                <Button aria-label="all events and filters"
                   key={option.value}
                   variant={filters.dateRange === option.value ? "default" : "outline"}
                   size="sm"
@@ -440,7 +440,7 @@ hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-foreground transition-all du
             }
           </p>
           {hasActiveFilters && (
-            <Button onClick={clearFilters} variant="outline">
+            <Button aria-label="all events and filters" onClick={clearFilters} variant="outline">
               Clear all filters
             </Button>
           )}
@@ -538,7 +538,7 @@ hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-foreground transition-all du
                     </div>
 
                   
-                    <Button
+                    <Button aria-label="all events and filters"
                       className="w-full rounded-full bg-gradient-to-r from-pink-400 to-purple-200 hover:from-pink-600 hover:to-purple-400 shadow-lg shadow-pink-500/25"
                       size="lg"
                     >

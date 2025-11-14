@@ -236,6 +236,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
                             Event Title
                           </Label>
                           <Input
+                          aria-label="Events details"
                             placeholder="Tech Conference 2024"
                             value={form.title}
                             onChange={(e) => handleChange("title", e.target.value)}
@@ -255,6 +256,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
                             Location
                           </Label>
                           <Input
+                          aria-label="Events details"
                             placeholder="Virtual or Physical location"
                             value={form.location}
                             onChange={(e) => handleChange("location", e.target.value)}
@@ -305,6 +307,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
                           <Popover>
                             <PopoverTrigger asChild>
                               <Button
+                              aria-label="next step"
                                 variant="outline"
                                 className="w-full justify-start text-left font-normal h-12 rounded-xl border-2 hover:border-blue-500 transition-colors"
                               >
@@ -325,6 +328,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
                           <div className="flex items-center gap-3">
                             <Clock className="w-4 h-4 text-muted-foreground" />
                             <Input
+                            aria-label="Events details"
                               type="time"
                               value={form.startTime}
                               onChange={(e) => handleChange("startTime", e.target.value)}
@@ -346,6 +350,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
                           <Popover>
                             <PopoverTrigger asChild>
                               <Button
+                              aria-label="next step"
                                 variant="outline"
                                 className="w-full justify-start text-left font-normal h-12 rounded-xl border-2 hover:border-purple-500 transition-colors"
                               >
@@ -366,6 +371,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
                           <div className="flex items-center gap-3">
                             <Clock className="w-4 h-4 text-muted-foreground" />
                             <Input
+                            aria-label="Events details"
                               type="time"
                               value={form.endTime}
                               onChange={(e) => handleChange("endTime", e.target.value)}
@@ -462,6 +468,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
             <div className="relative">
               <DollarSign className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
+              aria-label="Events details"
                 type="number"
                 placeholder="0.00"
                 value={form.price}
@@ -502,6 +509,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
               Capacity
             </Label>
             <Input
+            aria-label="Events details"
               type="number"
               placeholder="Unlimited"
               value={form.capacity}
@@ -538,6 +546,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
               <CardFooter className="flex justify-between p-8 pt-4">
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <Button
+                  aria-label="next step"
                     type="button"
                     variant="outline"
                     onClick={prevStep}
@@ -551,6 +560,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   {currentStep < steps.length ? (
                     <Button
+                    aria-label="next step"
                       type="button"
                       onClick={nextStep}
                       className="rounded-full px-8 bg-gradient-to-r from-pink-400 to-purple-300 hover:from-pink-600 hover:to-purple-400 shadow-lg shadow-blue-500/25"
@@ -559,6 +569,7 @@ const CurrentStepIcon = steps[currentStep - 1].icon;
                     </Button>
                   ) : (
                     <Button
+                    aria-label="next step"
                       type="submit"
                       disabled={loading}
                       className="rounded-full px-8 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-lg shadow-green-500/25"

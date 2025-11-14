@@ -85,7 +85,7 @@ export default function GoogleSuccessPage() {
             </p>
 
             <div className="space-y-3">
-              <Button 
+              <Button aria-label="google confirmation" 
                 onClick={() => navigate("/events")}
                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                 size="lg"
@@ -94,7 +94,7 @@ export default function GoogleSuccessPage() {
                 Browse More Events
               </Button>
               
-              <Button 
+              <Button aria-label="google confirmation" 
                 variant="outline" 
                 onClick={() => navigate("/my-events")}
                 className="w-full"

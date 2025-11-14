@@ -69,10 +69,12 @@ export default function NavBar() {
           <SignedOut>
             <div className="hidden sm:flex items-center gap-2">
                <SignInButton mode="modal">
-      <Button variant="ghost" size="sm">Sign in</Button>
+      <Button aria-label="user details" 
+      variant="ghost" size="sm">Sign in</Button>
     </SignInButton>
     <SignUpButton mode="modal">
-      <Button size="sm" className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700">
+      <Button aria-label="user details" 
+      size="sm" className="bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700">
         Sign up
       </Button>
     </SignUpButton>
@@ -90,7 +92,8 @@ export default function NavBar() {
           <div className="sm:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button aria-label="user details" 
+                variant="ghost" size="icon">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
@@ -124,10 +127,12 @@ export default function NavBar() {
                     <SignedOut>
                       <div className="space-y-3 pt-4">
                <SignInButton mode="modal">
-      <Button variant="ghost" size="sm" className="w-full max-w-[200px] mx-auto">Sign in</Button>
+      <Button aria-label="user details" 
+      variant="ghost" size="sm" className="w-full max-w-[200px] mx-auto">Sign in</Button>
     </SignInButton>
     <SignUpButton mode="modal">
-      <Button size="sm" className="w-full max-w-[200px] mx-auto">
+      <Button aria-label="user details" 
+      size="sm" className="w-full max-w-[200px] mx-auto">
         Sign up
       </Button>
     </SignUpButton>
