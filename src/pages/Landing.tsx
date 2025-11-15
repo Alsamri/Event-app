@@ -13,6 +13,7 @@ import {
   Users,
   TrendingUp,CheckCircle2
 } from "lucide-react";
+import { SignUpButton } from "@clerk/clerk-react";
 
 export default function PremiumLanding() {
   const navigate = useNavigate();
@@ -86,9 +87,7 @@ export default function PremiumLanding() {
     }
   };
 
-  const handleGetStarted = () => {
-    navigate("/signup");
-  };
+ 
 
   const handleViewEvents = () => {
     navigate("/events");
@@ -160,12 +159,16 @@ export default function PremiumLanding() {
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
             <motion.button
-              onClick={handleGetStarted}
+             
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.98 }}
               className="group px-8 py-4 gradient-purple-pink text-white rounded-2xl font-semibold text-lg shadow-colored-purple hover:shadow-xl transition-all duration-300 flex items-center gap-2"
-            >
-              Get Started Free
+            ><SignUpButton mode="modal">
+  <motion.button>
+    Get Started Free
+  </motion.button>
+</SignUpButton>
+             
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </motion.button>
             
@@ -354,12 +357,16 @@ export default function PremiumLanding() {
                 className="flex flex-col sm:flex-row gap-4 justify-center"
               >
                 <motion.button
-                  onClick={handleGetStarted}
+                  
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   className="group px-8 py-4 bg-white text-purple-600 rounded-2xl font-semibold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center gap-2"
-                >
-                  Get Started Free
+                ><SignUpButton mode="modal">
+  <motion.button>
+    Get Started Free
+  </motion.button>
+</SignUpButton>
+                
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </motion.button>
                 
