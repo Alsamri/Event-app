@@ -70,23 +70,26 @@ export default function EventsPage() {
     fetchEvents();
   }, [query, api]);
 
-  const locations = [...new Set(events.map(event => event.location).filter(Boolean))];
-
-
-   const filteredEvents = events.filter(event => {
+  // Get unique locations from upcoming events only (excluding past events)
+  const upcomingEvents = events.filter(event => {
     const eventDate = new Date(event.startTime);
     const now = new Date();
-    
- 
-    if (eventDate < now) return false;
+    return eventDate >= now;
+  });
   
+  const locations = [...new Set(upcomingEvents.map(event => event.location).filter(Boolean))];
+
+  const filteredEvents = upcomingEvents.filter(event => {
+    // Location filter
     if (filters.location !== "all" && event.location !== filters.location) return false;
     
-  
+    // Price type filter
     if (filters.priceType === "free" && event.isPaid) return false;
     if (filters.priceType === "paid" && !event.isPaid) return false;
     if (filters.priceType === "payWhatYouWant" && !event.payWhatYouFeel) return false;
     
+    // Date range filter
+    const eventDate = new Date(event.startTime);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
@@ -259,27 +262,32 @@ hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-foreground transition-all du
               <MapPin className="h-3.5 w-3.5 text-blue-600" />
               Location
             </Label>
-            <div className="flex flex-wrap gap-1">
-              <Button aria-label="all events and filters"
-                variant={filters.location === "all" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setFilters(prev => ({ ...prev, location: "all" }))}
-                className="text-xs h-7 px-2"
-              >
-                All
-              </Button>
-              {locations.slice(0, 4).map(location => (
+            {locations.length === 0 ? (
+              <p className="text-xs text-muted-foreground px-1">No locations available</p>
+            ) : (
+              <div className="flex flex-wrap gap-1">
                 <Button aria-label="all events and filters"
-                  key={location}
-                  variant={filters.location === location ? "default" : "outline"}
+                  variant={filters.location === "all" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setFilters(prev => ({ ...prev, location }))}
+                  onClick={() => setFilters(prev => ({ ...prev, location: "all" }))}
                   className="text-xs h-7 px-2"
                 >
-                  {location}
+                  All
                 </Button>
-              ))}
-            </div>
+                {locations.map(loc => (
+                  <Button aria-label="all events and filters"
+                    key={loc}
+                    variant={filters.location === loc ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFilters(prev => ({ ...prev, location: loc }))}
+                    className="text-xs h-7 px-2 max-w-[180px] truncate"
+                    title={loc}
+                  >
+                    {loc}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="space-y-2 mb-3">
