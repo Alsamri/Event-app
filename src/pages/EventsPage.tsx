@@ -73,7 +73,12 @@ export default function EventsPage() {
   const locations = [...new Set(events.map(event => event.location).filter(Boolean))];
 
 
-  const filteredEvents = events.filter(event => {
+   const filteredEvents = events.filter(event => {
+    const eventDate = new Date(event.startTime);
+    const now = new Date();
+    
+ 
+    if (eventDate < now) return false;
   
     if (filters.location !== "all" && event.location !== filters.location) return false;
     
@@ -82,7 +87,6 @@ export default function EventsPage() {
     if (filters.priceType === "paid" && !event.isPaid) return false;
     if (filters.priceType === "payWhatYouWant" && !event.payWhatYouFeel) return false;
     
-    const eventDate = new Date(event.startTime);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
